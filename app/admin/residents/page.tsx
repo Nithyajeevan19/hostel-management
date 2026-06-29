@@ -33,14 +33,38 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import type { Resident } from '@/lib/admin-data'
+
+function getCurrentMonth() {
+  return new Date().toISOString().slice(0, 7)
+}
+
+function getCurrentDate() {
+  return new Date().toISOString().split('T')[0]
+}
+
+function formatPaidMonth(month?: string) {
+  if (!month) return ''
+
+  return new Date(`${month}-01`).toLocaleDateString('en-IN', {
+    month: 'short',
+    year: 'numeric',
+  })
+}
 
 export default function ResidentsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [branchFilter, setBranchFilter] = useState('all')
   const [rentFilter, setRentFilter] = useState('all')
   const [isAddOpen, setIsAddOpen] = useState(false)
+  const [paymentResident, setPaymentResident] = useState<Resident | null>(null)
+  const [paymentForm, setPaymentForm] = useState({
+    rentStatus: 'paid' as Resident['rentStatus'],
+    paidMonth: getCurrentMonth(),
+    paidDate: getCurrentDate(),
+  })
 
-  const { residents, branches, addResident, currentUser } = useAdminStore()
+  const { residents, branches, addResident, currentUser, updateResidentRentPayment } = useAdminStore()
 
   const isManager = currentUser?.role === 'branch_manager'
   const targetBranchId = currentUser?.branchId
@@ -115,6 +139,29 @@ export default function ResidentsPage() {
       moveInDate: new Date().toISOString().split('T')[0], rentStatus: 'pending',
       monthlyRent: 0, securityDeposit: 0, occupation: ''
     })
+  }
+
+  const openPaymentDialog = (resident: Resident) => {
+    setPaymentResident(resident)
+    setPaymentForm({
+      rentStatus: resident.rentStatus,
+      paidMonth: resident.paidMonth || getCurrentMonth(),
+      paidDate: resident.paidDate || getCurrentDate(),
+    })
+  }
+
+  const handleSavePayment = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!paymentResident) return
+
+    updateResidentRentPayment(
+      paymentResident.id,
+      paymentForm.rentStatus,
+      paymentForm.rentStatus === 'paid' ? paymentForm.paidMonth : undefined,
+      paymentForm.rentStatus === 'paid' ? paymentForm.paidDate : undefined
+    )
+    toast.success(`Rent status updated for ${paymentResident.name}`)
+    setPaymentResident(null)
   }
 
   return (
@@ -204,6 +251,70 @@ export default function ResidentsPage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <Dialog open={!!paymentResident} onOpenChange={(open) => !open && setPaymentResident(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <form onSubmit={handleSavePayment}>
+            <DialogHeader>
+              <DialogTitle>Update Rent Payment</DialogTitle>
+              <DialogDescription>
+                Mark the resident's rent status and record the paid month and date.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label>Resident</Label>
+                <div className="rounded-xl border border-border bg-muted/30 px-3 py-2 text-sm font-semibold">
+                  {paymentResident?.name || 'Resident'}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rent-status">Rent Status</Label>
+                <Select
+                  value={paymentForm.rentStatus}
+                  onValueChange={(value: Resident['rentStatus']) => setPaymentForm({ ...paymentForm, rentStatus: value })}
+                >
+                  <SelectTrigger id="rent-status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="paid">Paid</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="overdue">Overdue</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {paymentForm.rentStatus === 'paid' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="paid-month">Paid Month</Label>
+                    <Input
+                      id="paid-month"
+                      type="month"
+                      required
+                      value={paymentForm.paidMonth}
+                      onChange={(e) => setPaymentForm({ ...paymentForm, paidMonth: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="paid-date">Paid Date</Label>
+                    <Input
+                      id="paid-date"
+                      type="date"
+                      required
+                      value={paymentForm.paidDate}
+                      onChange={(e) => setPaymentForm({ ...paymentForm, paidDate: e.target.value })}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="submit">Save Payment</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-4">
@@ -353,10 +464,28 @@ export default function ResidentsPage() {
                       </td>
                       <td className="px-4 py-3.5 font-semibold text-foreground">₹{resident.monthlyRent.toLocaleString('en-IN')}</td>
                       <td className="px-4 py-3.5">
-                        <Badge className={cn('gap-1 text-[10px] border', rentStatusColors[resident.rentStatus])}>
-                          <StatusIcon className="size-3" />
-                          {resident.rentStatus.charAt(0).toUpperCase() + resident.rentStatus.slice(1)}
-                        </Badge>
+                        <div className="flex flex-col items-start gap-1.5">
+                          <div className="flex items-center gap-2">
+                            <Badge className={cn('gap-1 text-[10px] border', rentStatusColors[resident.rentStatus])}>
+                              <StatusIcon className="size-3" />
+                              {resident.rentStatus.charAt(0).toUpperCase() + resident.rentStatus.slice(1)}
+                            </Badge>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="h-7 rounded-lg px-2 text-xs"
+                              onClick={() => openPaymentDialog(resident)}
+                            >
+                              Update
+                            </Button>
+                          </div>
+                          {resident.rentStatus === 'paid' && resident.paidMonth && resident.paidDate && (
+                            <p className="text-[11px] text-muted-foreground">
+                              {formatPaidMonth(resident.paidMonth)} on {new Date(resident.paidDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                            </p>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )

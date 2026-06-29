@@ -57,6 +57,8 @@ interface AdminState {
   addVisitRequest: (request: Omit<VisitRequest, 'id' | 'status'>) => void
   addBookingRequest: (request: Omit<BookingRequest, 'id' | 'status'>) => void
   updateRoomStatus: (roomId: string, status: AdminRoom['status']) => void
+  updateRoomOccupancy: (roomId: string, status: AdminRoom['status'], vacatingDate?: string) => void
+  updateResidentRentPayment: (residentId: string, rentStatus: Resident['rentStatus'], paidMonth?: string, paidDate?: string) => void
   updateBookingStatus: (id: string, status: BookingRequest['status']) => void
   updateVisitStatus: (id: string, status: VisitRequest['status']) => void
 }
@@ -216,11 +218,11 @@ export const useAdminStore = create<AdminState>()(
       updateRoomStatus: (roomId, status) =>
         set((state) => {
           const updatedRooms = state.rooms.map((r) =>
-            r.id === roomId ? { ...r, status } : r
+            r.id === roomId ? { ...r, status, vacatingDate: status === 'vacating' ? r.vacatingDate : undefined } : r
           )
           const branchOccupancy: Record<string, number> = {}
           updatedRooms.forEach((r) => {
-            if (r.status === 'occupied') {
+            if (r.status === 'occupied' || r.status === 'vacating') {
               branchOccupancy[r.branchId] = (branchOccupancy[r.branchId] || 0) + 1
             }
           })
@@ -232,6 +234,61 @@ export const useAdminStore = create<AdminState>()(
           return {
             rooms: updatedRooms,
             branches: updatedBranches,
+          }
+        }),
+
+      updateRoomOccupancy: (roomId, status, vacatingDate) =>
+        set((state) => {
+          const updatedRooms = state.rooms.map((r) =>
+            r.id === roomId
+              ? {
+                  ...r,
+                  status,
+                  residentName: status === 'available' ? undefined : r.residentName,
+                  vacatingDate: status === 'vacating' ? vacatingDate : undefined,
+                }
+              : r
+          )
+          const branchOccupancy: Record<string, number> = {}
+          updatedRooms.forEach((r) => {
+            if (r.status === 'occupied' || r.status === 'vacating') {
+              branchOccupancy[r.branchId] = (branchOccupancy[r.branchId] || 0) + 1
+            }
+          })
+          const updatedBranches = state.branches.map((b) => ({
+            ...b,
+            occupiedRooms: branchOccupancy[b.id] || 0,
+          }))
+
+          return {
+            rooms: updatedRooms,
+            branches: updatedBranches,
+          }
+        }),
+
+      updateResidentRentPayment: (residentId, rentStatus, paidMonth, paidDate) =>
+        set((state) => {
+          const updatedResidents = state.residents.map((r) =>
+            r.id === residentId
+              ? {
+                  ...r,
+                  rentStatus,
+                  paidMonth: rentStatus === 'paid' ? paidMonth : undefined,
+                  paidDate: rentStatus === 'paid' ? paidDate : undefined,
+                }
+              : r
+          )
+          const resident = state.residents.find((r) => r.id === residentId)
+          const newActivity: ActivityItem = {
+            id: `act-${Date.now()}`,
+            type: 'payment',
+            message: `Rent status for ${resident?.name || 'resident'} marked ${rentStatus}`,
+            timestamp: 'Just now',
+          }
+
+          return {
+            residents: updatedResidents,
+            recentActivity: [newActivity, ...state.recentActivity],
           }
         }),
 

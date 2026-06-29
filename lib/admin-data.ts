@@ -21,8 +21,9 @@ export interface AdminRoom {
   type: 'Single' | 'Double Sharing' | 'Triple Sharing'
   ac: boolean
   pricePerMonth: number
-  status: 'available' | 'occupied' | 'maintenance'
+  status: 'available' | 'occupied' | 'vacating' | 'maintenance'
   residentName?: string
+  vacatingDate?: string
   floor: number
 }
 
@@ -62,6 +63,8 @@ export interface Resident {
   branchName: string
   moveInDate: string
   rentStatus: 'paid' | 'pending' | 'overdue'
+  paidMonth?: string
+  paidDate?: string
   monthlyRent: number
   securityDeposit: number
   occupation: string

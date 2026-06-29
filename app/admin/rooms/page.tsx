@@ -9,10 +9,12 @@ import {
   User,
   Wrench,
   CheckCircle2,
+  CalendarClock,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { useAdminStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -22,14 +24,36 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import type { AdminRoom } from '@/lib/admin-data'
+
+function getToday() {
+  return new Date().toISOString().split('T')[0]
+}
+
+function getRoomStatusLabel(status: AdminRoom['status']) {
+  if (status === 'available') return 'Vacant'
+  if (status === 'vacating') return 'Vacating'
+  return status.charAt(0).toUpperCase() + status.slice(1)
+}
 
 export default function RoomsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [branchFilter, setBranchFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
   const [typeFilter, setTypeFilter] = useState('all')
+  const [vacatingRoom, setVacatingRoom] = useState<AdminRoom | null>(null)
+  const [vacatingDate, setVacatingDate] = useState(getToday())
 
-  const { rooms, branches, currentUser, updateRoomStatus } = useAdminStore()
+  const { rooms, branches, currentUser, updateRoomStatus, updateRoomOccupancy } = useAdminStore()
 
   const isManager = currentUser?.role === 'branch_manager'
   const targetBranchId = currentUser?.branchId
@@ -58,19 +82,36 @@ export default function RoomsPage() {
   const statusIcons: Record<string, typeof CheckCircle2> = {
     available: CheckCircle2,
     occupied: User,
+    vacating: CalendarClock,
     maintenance: Wrench,
   }
 
   const statusBadgeColors: Record<string, string> = {
     available: 'bg-emerald-100 text-emerald-700 border-emerald-200',
     occupied: 'bg-blue-100 text-blue-700 border-blue-200',
+    vacating: 'bg-orange-100 text-orange-700 border-orange-200',
     maintenance: 'bg-amber-100 text-amber-700 border-amber-200',
   }
 
   // Summary stats
   const totalAvailable = activeRooms.filter(r => r.status === 'available').length
   const totalOccupied = activeRooms.filter(r => r.status === 'occupied').length
+  const totalVacating = activeRooms.filter(r => r.status === 'vacating').length
   const totalMaintenance = activeRooms.filter(r => r.status === 'maintenance').length
+
+  const handleOpenVacatingDialog = (room: AdminRoom) => {
+    setVacatingRoom(room)
+    setVacatingDate(room.vacatingDate || getToday())
+  }
+
+  const handleSaveVacating = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!vacatingRoom) return
+
+    updateRoomOccupancy(vacatingRoom.id, 'vacating', vacatingDate)
+    toast.success(`Room ${vacatingRoom.roomNumber} marked vacating on ${new Date(vacatingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`)
+    setVacatingRoom(null)
+  }
 
   return (
     <div className="space-y-8">
@@ -83,6 +124,41 @@ export default function RoomsPage() {
           {isManager ? 'View and manage rooms for your assigned branch' : 'View and manage rooms across all branches'}
         </p>
       </div>
+
+      <Dialog open={!!vacatingRoom} onOpenChange={(open) => !open && setVacatingRoom(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <form onSubmit={handleSaveVacating}>
+            <DialogHeader>
+              <DialogTitle>Mark Room Vacating</DialogTitle>
+              <DialogDescription>
+                Select the date this resident is expected to vacate the room.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label>Room</Label>
+                <div className="rounded-xl border border-border bg-muted/30 px-3 py-2 text-sm font-semibold">
+                  Room {vacatingRoom?.roomNumber || ''}
+                  {vacatingRoom?.residentName ? ` - ${vacatingRoom.residentName}` : ''}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vacating-date">Vacating Date</Label>
+                <Input
+                  id="vacating-date"
+                  type="date"
+                  required
+                  value={vacatingDate}
+                  onChange={(e) => setVacatingDate(e.target.value)}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Save Vacating Date</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Summary Chips */}
       <div className="flex flex-wrap gap-3">
@@ -99,12 +175,23 @@ export default function RoomsPage() {
         </Card>
         <Card className="flex-1 min-w-[140px]">
           <CardContent className="p-4 flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-orange-50 flex items-center justify-center">
+              <CalendarClock className="size-5 text-orange-600" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-orange-600">{totalVacating}</p>
+              <p className="text-xs text-muted-foreground">Vacating</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="flex-1 min-w-[140px]">
+          <CardContent className="p-4 flex items-center gap-3">
             <div className="size-10 rounded-xl bg-emerald-50 flex items-center justify-center">
               <CheckCircle2 className="size-5 text-emerald-600" />
             </div>
             <div>
               <p className="text-xl font-bold text-emerald-600">{totalAvailable}</p>
-              <p className="text-xs text-muted-foreground">Available</p>
+              <p className="text-xs text-muted-foreground">Vacant</p>
             </div>
           </CardContent>
         </Card>
@@ -162,8 +249,9 @@ export default function RoomsPage() {
             className="h-11 rounded-xl border border-border bg-background px-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             <option value="all">All Status</option>
-            <option value="available">Available</option>
+            <option value="available">Vacant</option>
             <option value="occupied">Occupied</option>
+            <option value="vacating">Vacating</option>
             <option value="maintenance">Maintenance</option>
           </select>
           <select
@@ -225,22 +313,25 @@ export default function RoomsPage() {
                             <button className="outline-none">
                               <Badge className={cn('gap-1 text-[10px] border cursor-pointer hover:opacity-80 transition-all select-none', statusBadgeColors[room.status])}>
                                 <StatusIcon className="size-3" />
-                                {room.status.charAt(0).toUpperCase() + room.status.slice(1)}
+                                {getRoomStatusLabel(room.status)}
                               </Badge>
                             </button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="start" className="bg-background border border-border rounded-xl shadow-lg">
                             <DropdownMenuItem className="cursor-pointer" onClick={() => {
-                              updateRoomStatus(room.id, 'available')
-                              toast.success(`Room ${room.roomNumber} is now Available`)
+                              updateRoomOccupancy(room.id, 'available')
+                              toast.success(`Room ${room.roomNumber} is now Vacant`)
                             }}>
-                              Available
+                              Vacant
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer" onClick={() => {
-                              updateRoomStatus(room.id, 'occupied')
+                              updateRoomOccupancy(room.id, 'occupied')
                               toast.success(`Room ${room.roomNumber} is now Occupied`)
                             }}>
                               Occupied
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleOpenVacatingDialog(room)}>
+                              Vacating by date
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer" onClick={() => {
                               updateRoomStatus(room.id, 'maintenance')
@@ -250,6 +341,11 @@ export default function RoomsPage() {
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
+                        {room.status === 'vacating' && room.vacatingDate && (
+                          <p className="mt-1 text-[11px] text-muted-foreground">
+                            By {new Date(room.vacatingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </p>
+                        )}
                       </td>
                       <td className="px-4 py-3.5 text-muted-foreground">{room.residentName || '—'}</td>
                     </tr>
