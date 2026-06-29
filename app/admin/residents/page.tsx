@@ -105,7 +105,7 @@ export default function ResidentsPage() {
       ...newResident,
       branchId: finalBranchId,
       id: `res-${Date.now()}`,
-      branchName: selectedBranch.name.replace('HomeStay PG — ', '')
+      branchName: selectedBranch.name.replace('Mahi PG — ', '')
     })
     
     setIsAddOpen(false)
@@ -175,7 +175,7 @@ export default function ResidentsPage() {
                         </SelectTrigger>
                         <SelectContent>
                           {branches.filter(b => b.status === 'active').map(b => (
-                            <SelectItem key={b.id} value={b.id}>{b.name.replace('HomeStay PG — ', '')}</SelectItem>
+                            <SelectItem key={b.id} value={b.id}>{b.name.replace('Mahi PG — ', '')}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -273,7 +273,7 @@ export default function ResidentsPage() {
             >
               <option value="all">All Branches</option>
               {branches.filter(b => b.status === 'active').map(b => (
-                <option key={b.id} value={b.id}>{b.name.replace('HomeStay PG — ', '')}</option>
+                <option key={b.id} value={b.id}>{b.name.replace('Mahi PG — ', '')}</option>
               ))}
             </select>
           )}

@@ -7,7 +7,7 @@ import { ROOMS } from '@/lib/products'
 import { CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Our Rooms | HomeStay PG',
+  title: 'Our Rooms | Mahi PG',
   description: 'Explore our range of single, double, and triple sharing rooms with AC and non-AC options. Find the perfect accommodation for your needs.',
 }
 

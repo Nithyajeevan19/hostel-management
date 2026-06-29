@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactForm } from '@/components/contact-form'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | HomeStay PG',
-  description: 'Get in touch with HomeStay PG. Schedule a visit, ask questions, or book your room today.',
+  title: 'Contact Us | Mahi PG',
+  description: 'Get in touch with Mahi PG. Schedule a visit, ask questions, or book your room today.',
 }
 
 export default function ContactPage() {
@@ -53,11 +53,11 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold">Phone</h3>
-                      <a href="tel:+919876543210" className="mt-1 block text-muted-foreground hover:text-primary">
-                        +91 98765 43210
+                      <a href="tel:+917013392233" className="mt-1 block text-muted-foreground hover:text-primary">
+                        7013392233
                       </a>
                       <a href="tel:+919876543211" className="block text-muted-foreground hover:text-primary">
-                        +91 98765 43211
+                        7013392233
                       </a>
                     </div>
                   </CardContent>
@@ -152,7 +152,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="bg-background/80 backdrop-blur-md px-8 py-5 rounded-xl shadow-lg border border-border/50 pointer-events-auto transition-transform duration-300 hover:scale-105">
-                  <h3 className="font-serif text-xl font-bold text-foreground">HomeStay PG</h3>
+                  <h3 className="font-serif text-xl font-bold text-foreground">Mahi PG</h3>
                   <p className="mt-1 text-muted-foreground text-sm leading-relaxed">
                     123 Green Avenue, Near Central Mall,<br />
                     City Center, Pin - 560001

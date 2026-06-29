@@ -19,6 +19,32 @@ import { Input } from '@/components/ui/input'
 import { useAdminStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import type { VisitRequest } from '@/lib/admin-data'
+
+function getVisitDateLabel(date: string) {
+  if (!date || date === 'TBD') return 'to be decided'
+
+  return new Date(date).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function getWhatsAppNumber(phone: string) {
+  const digits = phone.replace(/\D/g, '')
+  if (digits.length === 10) return `91${digits}`
+  return digits
+}
+
+function getApprovalMessage(visit: VisitRequest) {
+  const visitDate = getVisitDateLabel(visit.preferredDate)
+  const visitTime = visit.preferredTime && visit.preferredTime !== 'TBD'
+    ? visit.preferredTime
+    : 'to be decided'
+
+  return `Hi ${visit.name}, your visit to Mahi PG is approved. Visit type: ${visit.visitType === 'in-person' ? 'In-person visit' : 'Virtual tour'}. Branch: ${visit.branchPreference}. Date: ${visitDate}. Time: ${visitTime}. For help, call 7013392233.`
+}
 
 export default function BookingsPage() {
   const [activeTab, setActiveTab] = useState<'bookings' | 'visits'>('bookings')
@@ -79,6 +105,34 @@ export default function BookingsPage() {
 
   const pendingBookings = activeBookings.filter(b => b.status === 'pending').length
   const pendingVisits = activeVisits.filter(v => v.status === 'pending').length
+
+  const handleConfirmVisit = async (visit: VisitRequest) => {
+    updateVisitStatus(visit.id, 'confirmed')
+    toast.success(`Visit request for ${visit.name} has been confirmed.`)
+
+    const message = getApprovalMessage(visit)
+    const whatsappUrl = `https://wa.me/${getWhatsAppNumber(visit.phone)}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+
+    try {
+      const response = await fetch('/api/visit-approval', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(visit),
+      })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Unable to send approval email.')
+      }
+
+      toast.success(`Approval email sent to ${visit.email}.`)
+    } catch (error) {
+      toast.error('Visit confirmed, but the approval email was not sent.', {
+        description: error instanceof Error ? error.message : 'Please check email settings.',
+      })
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -284,10 +338,7 @@ export default function BookingsPage() {
                           {visit.status === 'pending' && (
                             <div className="flex gap-1.5">
                               <Button
-                                onClick={() => {
-                                  updateVisitStatus(visit.id, 'confirmed')
-                                  toast.success(`Visit request for ${visit.name} has been confirmed.`)
-                                }}
+                                onClick={() => handleConfirmVisit(visit)}
                                 size="sm"
                                 variant="outline"
                                 className="h-7 text-xs rounded-lg px-2.5"

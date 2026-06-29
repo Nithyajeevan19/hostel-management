@@ -30,7 +30,7 @@ export default function AdminDashboard() {
     : branches
 
   const branchName = isManager
-    ? branches.find(b => b.id === targetBranchId)?.name.replace('HomeStay PG — ', '') || ''
+    ? branches.find(b => b.id === targetBranchId)?.name.replace('Mahi PG — ', '') || ''
     : ''
 
   const totalRevenueAllActive = branches.filter(b => b.status === 'active').reduce((sum, b) => sum + b.monthlyRevenue, 0)
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
               return (
                 <div key={branch.id} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-foreground truncate max-w-[140px]">{branch.name.replace('HomeStay PG — ', '')}</span>
+                    <span className="font-medium text-foreground truncate max-w-[140px]">{branch.name.replace('Mahi PG — ', '')}</span>
                     <span className="text-muted-foreground">{branch.occupiedRooms}/{branch.totalRooms} rooms</span>
                   </div>
                   <div className="h-2.5 bg-muted rounded-full overflow-hidden">
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
                     <Building2 className="size-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground truncate">{branch.name.replace('HomeStay PG — ', '')}</p>
+                    <p className="text-sm font-semibold text-foreground truncate">{branch.name.replace('Mahi PG — ', '')}</p>
                     <p className="text-xs text-muted-foreground">{branch.manager || 'N/A'}</p>
                   </div>
                 </div>

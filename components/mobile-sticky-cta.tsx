@@ -23,12 +23,12 @@ export function MobileStickyCTA() {
     >
       <div className="flex items-center gap-3 max-w-md mx-auto">
         <Button variant="outline" size="icon" className="h-12 w-12 rounded-full shrink-0 border-primary/20 text-primary bg-primary/5" asChild>
-          <Link href="tel:+919876543210" aria-label="Call Us">
+          <Link href="tel:+917013392233" aria-label="Call Us">
             <Phone className="size-5" />
           </Link>
         </Button>
         <Button variant="outline" size="icon" className="h-12 w-12 rounded-full shrink-0 border-green-600/20 text-green-600 bg-green-50" asChild>
-          <Link href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <Link href="https://wa.me/917013392233" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <MessageCircle className="size-5" />
           </Link>
         </Button>

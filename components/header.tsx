@@ -62,7 +62,7 @@ export function Header() {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 shadow-[0_0_20px_rgba(var(--primary),0.5)] transition-opacity duration-500" />
             </div>
             <span className="font-serif text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary whitespace-nowrap">
-              HomeStay PG
+              Mahi PG
             </span>
           </Link>
         </div>
@@ -87,9 +87,9 @@ export function Header() {
         <div className="flex min-w-[200px] justify-end items-center gap-3 xl:gap-5 relative z-10 shrink-0">
           <div className="hidden lg:flex flex-col items-end">
             <span className="text-[9px] font-bold text-green-600 uppercase tracking-widest leading-none mb-1">Live Support</span>
-            <Link href="https://wa.me/919876543210" className="flex items-center gap-1.5 text-sm font-bold hover:text-primary transition-colors">
+            <Link href="https://wa.me/917013392233" className="flex items-center gap-1.5 text-sm font-bold hover:text-primary transition-colors">
               <Phone className="size-3.5 text-primary" />
-              98765 43210
+              7013392233
             </Link>
           </div>
           <Button size="sm" className="hidden sm:flex rounded-full h-11 px-6 transition-all duration-500 hover:-translate-y-0.5 group relative overflow-hidden bg-primary text-primary-foreground font-bold" asChild>
@@ -118,7 +118,7 @@ export function Header() {
                       <Home className="size-6" />
                     </div>
                     <span className="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                      HomeStay PG
+                      Mahi PG
                     </span>
                   </Link>
                 </div>
@@ -142,7 +142,7 @@ export function Header() {
 
                 <div className="p-6 bg-muted/30 border-t border-border/30 flex flex-col gap-4">
                   <Button variant="outline" size="lg" className="w-full rounded-2xl h-14 text-base font-semibold group bg-background" asChild>
-                    <Link href="tel:+919876543210" className="flex items-center justify-center gap-2">
+                    <Link href="tel:+917013392233" className="flex items-center justify-center gap-2">
                       <Phone className="size-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
                       Call Us
                     </Link>

@@ -20,11 +20,11 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'HomeStay PG | Premium Paying Guest Accommodation',
+  title: 'Mahi PG | Premium Paying Guest Accommodation',
   description: 'Find your perfect home away from home. Premium PG accommodation for students and working professionals with modern amenities, homely food, and a comfortable living experience.',
   keywords: ['PG hostel', 'paying guest', 'student accommodation', 'working professional housing', 'affordable rooms', 'hostel near me'],
   openGraph: {
-    title: 'HomeStay PG | Premium Paying Guest Accommodation',
+    title: 'Mahi PG | Premium Paying Guest Accommodation',
     description: 'Find your perfect home away from home. Premium PG accommodation for students and working professionals.',
     type: 'website',
   },

@@ -16,7 +16,7 @@ export function ResidentLifeSection() {
     <section className="py-24 md:py-32 bg-secondary/10 overflow-hidden">
       <div className="container mx-auto px-4 max-w-5xl">
         <ScrollReveal animation="fade-up" className="mb-16 md:mb-20 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Life at HomeStay</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Life at Mahi PG</p>
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-foreground tracking-tight">
             A Day in the <span className="text-primary italic">Life</span>
           </h2>

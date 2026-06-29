@@ -108,7 +108,7 @@ export function FAQSection() {
           <p className="mt-8 text-center text-sm text-muted-foreground">
             Still have questions?{' '}
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/917013392233"
               className="font-semibold text-primary underline-offset-4 hover:underline"
               target="_blank"
               rel="noopener noreferrer"
@@ -117,10 +117,10 @@ export function FAQSection() {
             </a>{' '}
             or{' '}
             <a
-              href="tel:+919876543210"
+              href="tel:+917013392233"
               className="font-semibold text-primary underline-offset-4 hover:underline"
             >
-              call +91 98765 43210
+              call 7013392233
             </a>
           </p>
         </ScrollReveal>

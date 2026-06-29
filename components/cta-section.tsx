@@ -50,7 +50,7 @@ export function CTASection() {
               asChild
             >
               <a
-                href="https://wa.me/919876543210?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20rooms%20at%20HomeStay%20PG"
+                href="https://wa.me/917013392233?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20rooms%20at%20Mahi%20PG"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -63,9 +63,9 @@ export function CTASection() {
               className="h-14 gap-2 border-2 border-primary-foreground/40 bg-transparent px-8 text-base font-semibold text-primary-foreground hover:bg-primary-foreground/10"
               asChild
             >
-              <a href="tel:+919876543210">
+              <a href="tel:+917013392233">
                 <Phone className="size-5" />
-                Call: +91 98765 43210
+                Call: 7013392233
               </a>
             </Button>
           </div>

@@ -71,7 +71,7 @@ export default function BranchesPage() {
       id: `br-${Date.now()}`,
       occupiedRooms: 0,
       monthlyRevenue: 0,
-      name: `HomeStay PG — ${newBranch.name}`
+      name: `Mahi PG — ${newBranch.name}`
     })
     setIsAddOpen(false)
     toast.success('Branch added successfully!')
@@ -224,7 +224,7 @@ export default function BranchesPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <CardTitle className="font-serif text-lg">{branch.name.replace('HomeStay PG — ', '')}</CardTitle>
+                    <CardTitle className="font-serif text-lg">{branch.name.replace('Mahi PG — ', '')}</CardTitle>
                     <div className="flex items-center gap-1.5 text-muted-foreground">
                       <MapPin className="size-3.5" />
                       <span className="text-xs">{branch.address}</span>

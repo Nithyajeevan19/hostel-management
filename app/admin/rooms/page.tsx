@@ -152,7 +152,7 @@ export default function RoomsPage() {
             >
               <option value="all">All Branches</option>
               {branches.filter(b => b.status === 'active').map(b => (
-                <option key={b.id} value={b.id}>{b.name.replace('HomeStay PG — ', '')}</option>
+                <option key={b.id} value={b.id}>{b.name.replace('Mahi PG — ', '')}</option>
               ))}
             </select>
           )}

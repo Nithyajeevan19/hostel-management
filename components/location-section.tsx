@@ -58,7 +58,7 @@ export function LocationSection() {
                   className="absolute inset-0 size-full border-0"
                   loading="lazy"
                   style={{ filter: 'grayscale(15%) contrast(1.05)' }}
-                  title="HomeStay PG Location"
+                  title="Mahi PG Location"
                 />
               </div>
 
@@ -70,7 +70,7 @@ export function LocationSection() {
                       <MapPin className="size-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg text-foreground">HomeStay PG</h4>
+                      <h4 className="font-bold text-lg text-foreground">Mahi PG</h4>
                       <p className="text-muted-foreground text-sm leading-relaxed mt-1">
                         Plot 42, Miyapur Road, Near Miyapur Metro Station,<br />
                         Hyderabad, Telangana — 500049

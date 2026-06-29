@@ -74,7 +74,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">Call Us</h3>
-                    <p className="text-sm text-muted-foreground mt-1">+91 98765 43210</p>
+                    <p className="text-sm text-muted-foreground mt-1">7013392233</p>
                   </div>
                 </div>
                 <div className="bg-background rounded-2xl p-6 border shadow-sm flex items-start gap-4">

@@ -42,7 +42,7 @@ export function Footer() {
               <div className="flex size-9 items-center justify-center rounded-lg bg-primary">
                 <Home className="size-5 text-primary-foreground" />
               </div>
-              <span className="font-serif text-xl font-bold">HomeStay PG</span>
+              <span className="font-serif text-xl font-bold">Mahi PG</span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Premium paying guest accommodation for students and working
@@ -60,7 +60,7 @@ export function Footer() {
                 <Instagram className="size-4" />
               </a>
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/917013392233"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -105,11 +105,11 @@ export function Footer() {
             </h3>
             <div className="flex flex-col gap-4 text-sm text-muted-foreground">
               <a
-                href="tel:+919876543210"
+                href="tel:+917013392233"
                 className="flex items-center gap-3 transition-colors hover:text-primary"
               >
                 <Phone className="size-4 shrink-0 text-primary" />
-                +91 98765 43210
+                7013392233
               </a>
               <a
                 href="mailto:info@homestaypg.com"
@@ -163,7 +163,7 @@ export function Footer() {
         <Separator className="my-8" />
 
         <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-muted-foreground md:flex-row">
-          <p>© {new Date().getFullYear()} HomeStay PG. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Mahi PG. All rights reserved.</p>
           <div className="flex gap-5">
             {policies.map((p) => (
               <Link
