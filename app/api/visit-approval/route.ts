@@ -70,10 +70,10 @@ export async function POST(request: NextRequest) {
   await transporter.sendMail({
     from: SMTP_FROM || SMTP_USER,
     to: visit.email,
-    subject: 'Your Mahi PG visit is approved',
+    subject: 'Your SURYA PG visit is approved',
     text: `Hi ${visit.name},
 
-Your visit to Mahi PG has been approved.
+Your visit to SURYA PG has been approved.
 
 Visit type: ${visit.visitType === 'in-person' ? 'In-person visit' : 'Virtual tour'}
 Branch: ${visit.branchPreference}
@@ -83,10 +83,10 @@ Time: ${visitTime}
 For help, call or WhatsApp us at 7013392233.
 
 Thank you,
-Mahi PG`,
+SURYA PG`,
     html: `
       <p>Hi ${customerName},</p>
-      <p>Your visit to <strong>Mahi PG</strong> has been approved.</p>
+      <p>Your visit to <strong>SURYA PG</strong> has been approved.</p>
       <ul>
         <li><strong>Visit type:</strong> ${visit.visitType === 'in-person' ? 'In-person visit' : 'Virtual tour'}</li>
         <li><strong>Branch:</strong> ${branchPreference}</li>
@@ -94,7 +94,7 @@ Mahi PG`,
         <li><strong>Time:</strong> ${safeVisitTime}</li>
       </ul>
       <p>For help, call or WhatsApp us at <strong>7013392233</strong>.</p>
-      <p>Thank you,<br />Mahi PG</p>
+      <p>Thank you,<br />SURYA PG</p>
     `,
   })
 

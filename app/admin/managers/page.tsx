@@ -201,7 +201,7 @@ export default function ManagersPage() {
                     <SelectContent>
                       {branches.map((b) => (
                         <SelectItem key={b.id} value={b.id}>
-                          {b.name.replace('Mahi PG — ', '')} {b.manager && b.manager !== 'TBD' ? `(Current: ${b.manager})` : '(Unassigned)'}
+                          {b.name.replace('SURYA PG — ', '')} {b.manager && b.manager !== 'TBD' ? `(Current: ${b.manager})` : '(Unassigned)'}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -243,7 +243,7 @@ export default function ManagersPage() {
               </thead>
               <tbody>
                 {filteredManagers.map((manager) => {
-                  const assignedBranchName = branches.find((b) => b.id === manager.branchId)?.name?.replace('Mahi PG — ', '') || 'Unassigned'
+                  const assignedBranchName = branches.find((b) => b.id === manager.branchId)?.name?.replace('SURYA PG — ', '') || 'Unassigned'
                   const initials = manager.name
                     .split(' ')
                     .map((n) => n[0])

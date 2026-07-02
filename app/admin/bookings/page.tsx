@@ -43,7 +43,7 @@ function getApprovalMessage(visit: VisitRequest) {
     ? visit.preferredTime
     : 'to be decided'
 
-  return `Hi ${visit.name}, your visit to Mahi PG is approved. Visit type: ${visit.visitType === 'in-person' ? 'In-person visit' : 'Virtual tour'}. Branch: ${visit.branchPreference}. Date: ${visitDate}. Time: ${visitTime}. For help, call 7013392233.`
+  return `Hi ${visit.name}, your visit to SURYA PG is approved. Visit type: ${visit.visitType === 'in-person' ? 'In-person visit' : 'Virtual tour'}. Branch: ${visit.branchPreference}. Date: ${visitDate}. Time: ${visitTime}. For help, call 7013392233.`
 }
 
 export default function BookingsPage() {

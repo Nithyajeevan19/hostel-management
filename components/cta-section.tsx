@@ -50,7 +50,7 @@ export function CTASection() {
               asChild
             >
               <a
-                href="https://wa.me/917013392233?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20rooms%20at%20Mahi%20PG"
+                href="https://wa.me/917013392233?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20rooms%20at%20SURYA%20PG"
                 target="_blank"
                 rel="noopener noreferrer"
               >

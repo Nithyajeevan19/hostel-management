@@ -80,7 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 
   const branchName = currentUser?.role === 'branch_manager'
-    ? branches.find(b => b.id === currentUser.branchId)?.name.replace('Mahi PG — ', '')
+    ? branches.find(b => b.id === currentUser.branchId)?.name.replace('SURYA PG — ', '')
     : null
 
   return (
@@ -107,7 +107,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Home className="size-5" />
             </div>
             <div>
-              <span className="text-lg font-bold tracking-tight">Mahi PG</span>
+              <span className="text-lg font-bold tracking-tight">SURYA PG</span>
               <span className="block text-[10px] font-semibold text-white/50 uppercase tracking-widest">Admin Panel</span>
             </div>
           </Link>

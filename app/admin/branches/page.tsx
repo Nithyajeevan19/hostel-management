@@ -48,7 +48,7 @@ export default function BranchesPage() {
   const [newBranch, setNewBranch] = useState({
     name: '',
     address: '',
-    city: 'Hyderabad',
+    city: 'Mumbai',
     totalRooms: 0,
     status: 'active' as BranchFormStatus,
     manager: '',
@@ -73,14 +73,14 @@ export default function BranchesPage() {
       id: `br-${Date.now()}`,
       occupiedRooms: 0,
       monthlyRevenue: 0,
-      name: `Mahi PG — ${newBranch.name}`
+      name: `SURYA PG — ${newBranch.name}`
     })
     setIsAddOpen(false)
     toast.success('Branch added successfully!')
     setNewBranch({
       name: '',
       address: '',
-      city: 'Hyderabad',
+      city: 'Mumbai',
       totalRooms: 0,
       status: 'active',
       manager: '',
@@ -102,7 +102,7 @@ export default function BranchesPage() {
             Branch Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage all your PG properties across Hyderabad
+            Manage all your PG properties across Mumbai
           </p>
         </div>
         
@@ -226,7 +226,7 @@ export default function BranchesPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <CardTitle className="font-serif text-lg">{branch.name.replace('Mahi PG — ', '')}</CardTitle>
+                    <CardTitle className="font-serif text-lg">{branch.name.replace('SURYA PG — ', '')}</CardTitle>
                     <div className="flex items-center gap-1.5 text-muted-foreground">
                       <MapPin className="size-3.5" />
                       <span className="text-xs">{branch.address}</span>

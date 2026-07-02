@@ -77,7 +77,7 @@ export function Checkout({ roomId }: CheckoutProps) {
         key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Mahi PG',
+        name: 'SURYA PG',
         description: orderData.roomDesc,
         order_id: orderData.orderId,
         handler: function (response: RazorpaySuccessResponse) {
@@ -132,7 +132,7 @@ export function Checkout({ roomId }: CheckoutProps) {
         <CheckCircle2 className="size-16 text-primary mb-4" />
         <h3 className="text-2xl font-serif font-bold text-foreground">Booking Confirmed!</h3>
         <p className="mt-2 text-muted-foreground max-w-md">
-          Thank you for choosing Mahi PG. Your security deposit has been paid successfully and your room is reserved. We will contact you shortly with the next steps.
+          Thank you for choosing SURYA PG. Your security deposit has been paid successfully and your room is reserved. We will contact you shortly with the next steps.
         </p>
       </div>
     )

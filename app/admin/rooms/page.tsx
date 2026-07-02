@@ -47,7 +47,7 @@ function getRoomStatusLabel(status: AdminRoom['status']) {
 }
 
 function getBranchDisplayName(name: string) {
-  return name.replace('Mahi PG — ', '').replace('Mahi PG â€” ', '')
+  return name.replace('SURYA PG — ', '').replace('SURYA PG â€” ', '')
 }
 
 const emptyRoomForm = {
@@ -436,7 +436,7 @@ export default function RoomsPage() {
             >
               <option value="all">All Branches</option>
               {branches.filter(b => b.status === 'active').map(b => (
-                <option key={b.id} value={b.id}>{b.name.replace('Mahi PG — ', '')}</option>
+                <option key={b.id} value={b.id}>{b.name.replace('SURYA PG — ', '')}</option>
               ))}
             </select>
           )}

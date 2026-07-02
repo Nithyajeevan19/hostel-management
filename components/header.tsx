@@ -62,7 +62,7 @@ export function Header() {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 shadow-[0_0_20px_rgba(var(--primary),0.5)] transition-opacity duration-500" />
             </div>
             <span className="font-serif text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary whitespace-nowrap">
-              Mahi PG
+              SURYA PG
             </span>
           </Link>
         </div>
@@ -118,7 +118,7 @@ export function Header() {
                       <Home className="size-6" />
                     </div>
                     <span className="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                      Mahi PG
+                      SURYA PG
                     </span>
                   </Link>
                 </div>
