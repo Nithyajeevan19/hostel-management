@@ -53,6 +53,7 @@ interface AdminState {
   // Data actions
   addBranch: (branch: Branch) => void
   deleteBranch: (id: string) => void
+  addRoom: (room: AdminRoom) => void
   addResident: (resident: Resident) => void
   addVisitRequest: (request: Omit<VisitRequest, 'id' | 'status'>) => void
   addBookingRequest: (request: Omit<BookingRequest, 'id' | 'status'>) => void
@@ -171,6 +172,31 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           branches: state.branches.filter((b) => b.id !== id),
         })),
+
+      addRoom: (room) =>
+        set((state) => {
+          const updatedRooms = [...state.rooms, room]
+          const branchOccupancy: Record<string, number> = {}
+          updatedRooms.forEach((r) => {
+            if (r.status === 'occupied' || r.status === 'vacating') {
+              branchOccupancy[r.branchId] = (branchOccupancy[r.branchId] || 0) + 1
+            }
+          })
+          const updatedBranches = state.branches.map((b) =>
+            b.id === room.branchId
+              ? {
+                  ...b,
+                  totalRooms: b.totalRooms + 1,
+                  occupiedRooms: branchOccupancy[b.id] || 0,
+                }
+              : b
+          )
+
+          return {
+            rooms: updatedRooms,
+            branches: updatedBranches,
+          }
+        }),
 
       addResident: (resident) =>
         set((state) => ({

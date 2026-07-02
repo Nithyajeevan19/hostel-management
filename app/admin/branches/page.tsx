@@ -38,6 +38,8 @@ import {
 } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
+type BranchFormStatus = 'active' | 'maintenance' | 'upcoming'
+
 export default function BranchesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -48,7 +50,7 @@ export default function BranchesPage() {
     address: '',
     city: 'Hyderabad',
     totalRooms: 0,
-    status: 'active' as 'active' | 'maintenance' | 'upcoming',
+    status: 'active' as BranchFormStatus,
     manager: '',
     phone: '',
   })
@@ -135,7 +137,7 @@ export default function BranchesPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="status">Status</Label>
-                    <Select value={newBranch.status} onValueChange={(v: any) => setNewBranch({...newBranch, status: v})}>
+                    <Select value={newBranch.status} onValueChange={(v: BranchFormStatus) => setNewBranch({...newBranch, status: v})}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

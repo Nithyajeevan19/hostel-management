@@ -1,0 +1,599 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  active
+  inactive
+  suspended
+}
+
+enum BranchStatus {
+  active
+  maintenance
+  upcoming
+  deleted
+}
+
+enum RoomStatus {
+  vacant
+  occupied
+  vacating
+  maintenance
+}
+
+enum BedStatus {
+  vacant
+  occupied
+  maintenance
+}
+
+enum RequestStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+}
+
+enum VisitType {
+  in_person
+  virtual
+}
+
+enum RentStatus {
+  pending
+  paid
+  overdue
+  waived
+}
+
+enum InvoiceStatus {
+  draft
+  pending
+  paid
+  partially_paid
+  overdue
+  cancelled
+}
+
+enum PaymentStatus {
+  created
+  attempted
+  success
+  failed
+  refunded
+}
+
+enum PaymentMode {
+  cash
+  upi
+  card
+  bank_transfer
+  razorpay
+  other
+}
+
+enum NotificationChannel {
+  app
+  email
+  whatsapp
+  sms
+}
+
+enum MessageStatus {
+  queued
+  sent
+  delivered
+  read
+  failed
+  retrying
+}
+
+enum ReminderTemplate {
+  friendly
+  due
+  late
+  final
+  custom
+}
+
+enum ActivityType {
+  booking
+  visit
+  payment
+  invoice
+  reminder
+  resident
+  room
+  branch
+  auth
+}
+
+model User {
+  id             String      @id @default(cuid())
+  name           String
+  email          String      @unique
+  phone          String?
+  passwordHash   String
+  status         UserStatus  @default(active)
+  roleId         String
+  branchId       String?
+  refreshTokenId String?
+  lastLoginAt    DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  deletedAt      DateTime?
+
+  role             Role              @relation(fields: [roleId], references: [id])
+  branch           Branch?           @relation(fields: [branchId], references: [id])
+  managedBranches  Branch[]          @relation("BranchManager")
+  notifications    Notification[]
+  activityLogs     ActivityLog[]
+  auditLogs         AuditLog[]
+  sentReminders     ReminderLog[]     @relation("ReminderSender")
+
+  @@index([roleId])
+  @@index([branchId])
+  @@index([status])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model Branch {
+  id             String       @id @default(cuid())
+  name           String
+  address        String
+  city           String
+  phone          String?
+  status         BranchStatus @default(active)
+  managerId      String?
+  totalRooms     Int          @default(0)
+  occupiedRooms  Int          @default(0)
+  monthlyRevenue Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  manager              User?                 @relation("BranchManager", fields: [managerId], references: [id])
+  users                User[]
+  rooms                Room[]
+  residents            Resident[]
+  bookings             Booking[]
+  visitRequests        VisitRequest[]
+  invoices             Invoice[]
+  payments             Payment[]
+  expenses             Expense[]
+  electricityCharges   ElectricityCharge[]
+  occupancyStatistics  OccupancyStatistic[]
+
+  @@index([status])
+  @@index([managerId])
+  @@index([city])
+}
+
+model Room {
+  id             String     @id @default(cuid())
+  branchId       String
+  roomNumber     String
+  type           String
+  ac             Boolean    @default(false)
+  floor          Int
+  pricePerMonth  Int
+  status         RoomStatus @default(vacant)
+  vacatingDate   DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  deletedAt      DateTime?
+
+  branch    Branch     @relation(fields: [branchId], references: [id])
+  beds      Bed[]
+  residents Resident[]
+  invoices  Invoice[]
+
+  @@unique([branchId, roomNumber])
+  @@index([branchId, status])
+  @@index([floor])
+}
+
+model Bed {
+  id          String    @id @default(cuid())
+  roomId      String
+  bedNumber   String
+  status      BedStatus @default(vacant)
+  monthlyRent Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  room      Room       @relation(fields: [roomId], references: [id])
+  residents Resident[]
+  invoices  Invoice[]
+
+  @@unique([roomId, bedNumber])
+  @@index([roomId, status])
+}
+
+model Resident {
+  id              String     @id @default(cuid())
+  branchId        String
+  roomId          String?
+  bedId           String?
+  name            String
+  phone           String
+  email           String?
+  occupation      String?
+  moveInDate      DateTime
+  moveOutDate     DateTime?
+  rentStatus      RentStatus @default(pending)
+  monthlyRent     Int
+  securityDeposit Int        @default(0)
+  dueDay          Int        @default(5)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  deletedAt       DateTime?
+
+  branch            Branch             @relation(fields: [branchId], references: [id])
+  room              Room?              @relation(fields: [roomId], references: [id])
+  bed               Bed?               @relation(fields: [bedId], references: [id])
+  invoices          Invoice[]
+  payments          Payment[]
+  receipts          Receipt[]
+  reminderLogs      ReminderLog[]
+  electricityCharges ElectricityCharge[]
+  lateFees          LateFee[]
+
+  @@index([branchId])
+  @@index([roomId])
+  @@index([bedId])
+  @@index([rentStatus])
+  @@index([phone])
+}
+
+model Booking {
+  id               String        @id @default(cuid())
+  branchId         String?
+  name             String
+  phone            String
+  email            String
+  roomType         String
+  branchPreference String
+  preferredDate    DateTime?
+  notes            String?
+  status           RequestStatus @default(pending)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  deletedAt        DateTime?
+
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  @@index([branchId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model VisitRequest {
+  id               String        @id @default(cuid())
+  branchId         String?
+  name             String
+  phone            String
+  email            String
+  visitType        VisitType     @default(in_person)
+  preferredDate    DateTime?
+  preferredTime    String?
+  branchPreference String
+  status           RequestStatus @default(pending)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  deletedAt        DateTime?
+
+  branch Branch? @relation(fields: [branchId], references: [id])
+
+  @@index([branchId])
+  @@index([status])
+  @@index([preferredDate])
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  invoiceNo   String        @unique
+  branchId    String
+  residentId  String
+  roomId      String?
+  bedId       String?
+  month       Int
+  year        Int
+  rent        Int           @default(0)
+  electricity Int           @default(0)
+  laundry     Int           @default(0)
+  maintenance Int           @default(0)
+  lateFee     Int           @default(0)
+  discount    Int           @default(0)
+  tax         Int           @default(0)
+  grandTotal  Int
+  status      InvoiceStatus @default(pending)
+  dueDate     DateTime
+  paidAt      DateTime?
+  pdfUrl      String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+
+  branch       Branch        @relation(fields: [branchId], references: [id])
+  resident     Resident      @relation(fields: [residentId], references: [id])
+  room         Room?         @relation(fields: [roomId], references: [id])
+  bed          Bed?          @relation(fields: [bedId], references: [id])
+  items        InvoiceItem[]
+  payments     Payment[]
+  receipts     Receipt[]
+  notifications Notification[]
+
+  @@unique([residentId, month, year, deletedAt])
+  @@index([branchId, status])
+  @@index([residentId])
+  @@index([dueDate])
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Int      @default(1)
+  unitAmount  Int
+  totalAmount Int
+  createdAt   DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  branchId          String
+  residentId        String?
+  invoiceId         String?
+  amount            Int
+  mode              PaymentMode
+  status            PaymentStatus @default(created)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  failureReason     String?
+  paidAt            DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  branch   Branch    @relation(fields: [branchId], references: [id])
+  resident Resident? @relation(fields: [residentId], references: [id])
+  invoice  Invoice?  @relation(fields: [invoiceId], references: [id])
+  receipt  Receipt?
+
+  @@index([branchId, status])
+  @@index([residentId])
+  @@index([invoiceId])
+  @@index([razorpayOrderId])
+  @@index([razorpayPaymentId])
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  receiptNo String   @unique
+  paymentId String   @unique
+  invoiceId String?
+  residentId String
+  amount    Int
+  pdfUrl    String?
+  createdAt DateTime @default(now())
+
+  payment  Payment  @relation(fields: [paymentId], references: [id])
+  invoice  Invoice? @relation(fields: [invoiceId], references: [id])
+  resident Resident @relation(fields: [residentId], references: [id])
+
+  @@index([residentId])
+  @@index([invoiceId])
+}
+
+model ReminderLog {
+  id          String           @id @default(cuid())
+  residentId  String?
+  branchId    String?
+  sentById     String?
+  template     ReminderTemplate
+  channel      NotificationChannel
+  message      String
+  status       MessageStatus   @default(queued)
+  failureReason String?
+  sentAt       DateTime?
+  createdAt    DateTime        @default(now())
+
+  resident Resident? @relation(fields: [residentId], references: [id])
+  sentBy   User?     @relation("ReminderSender", fields: [sentById], references: [id])
+
+  @@index([residentId])
+  @@index([branchId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WhatsAppLog {
+  id           String        @id @default(cuid())
+  recipient    String
+  templateKey  String
+  payload      Json
+  providerId   String?
+  status       MessageStatus @default(queued)
+  failureReason String?
+  retryCount   Int           @default(0)
+  sentAt       DateTime?
+  deliveredAt  DateTime?
+  createdAt    DateTime      @default(now())
+
+  @@index([recipient])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model EmailLog {
+  id           String        @id @default(cuid())
+  recipient    String
+  subject      String
+  templateKey  String?
+  payload      Json?
+  status       MessageStatus @default(queued)
+  failureReason String?
+  sentAt       DateTime?
+  createdAt    DateTime      @default(now())
+
+  @@index([recipient])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String              @id @default(cuid())
+  userId    String?
+  invoiceId String?
+  title     String
+  message   String
+  channel   NotificationChannel @default(app)
+  readAt    DateTime?
+  createdAt DateTime            @default(now())
+
+  user    User?    @relation(fields: [userId], references: [id])
+  invoice Invoice? @relation(fields: [invoiceId], references: [id])
+
+  @@index([userId, readAt])
+  @@index([createdAt])
+}
+
+model ActivityLog {
+  id        String       @id @default(cuid())
+  userId    String?
+  type      ActivityType
+  message   String
+  metadata  Json?
+  createdAt DateTime     @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  ipAddress String?
+  before    Json?
+  after     Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model ElectricityCharge {
+  id          String   @id @default(cuid())
+  branchId    String
+  residentId  String?
+  month       Int
+  year        Int
+  units       Decimal  @db.Decimal(10, 2)
+  ratePerUnit Decimal  @db.Decimal(10, 2)
+  amount      Int
+  createdAt   DateTime @default(now())
+
+  branch   Branch    @relation(fields: [branchId], references: [id])
+  resident Resident? @relation(fields: [residentId], references: [id])
+
+  @@index([branchId, month, year])
+  @@index([residentId])
+}
+
+model LateFee {
+  id         String   @id @default(cuid())
+  residentId String
+  invoiceId  String?
+  amount     Int
+  reason     String?
+  appliedAt  DateTime @default(now())
+
+  resident Resident @relation(fields: [residentId], references: [id])
+
+  @@index([residentId])
+  @@index([invoiceId])
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  branchId    String
+  category    String
+  description String
+  amount      Int
+  expenseDate DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@index([branchId, expenseDate])
+  @@index([category])
+}
+
+model OccupancyStatistic {
+  id            String   @id @default(cuid())
+  branchId      String
+  date          DateTime
+  totalRooms    Int
+  occupiedRooms Int
+  vacantBeds    Int
+  occupancyRate Decimal  @db.Decimal(5, 2)
+  createdAt     DateTime @default(now())
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@unique([branchId, date])
+  @@index([date])
+}

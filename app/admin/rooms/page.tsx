@@ -10,6 +10,7 @@ import {
   Wrench,
   CheckCircle2,
   CalendarClock,
+  Plus,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -45,6 +46,22 @@ function getRoomStatusLabel(status: AdminRoom['status']) {
   return status.charAt(0).toUpperCase() + status.slice(1)
 }
 
+function getBranchDisplayName(name: string) {
+  return name.replace('Mahi PG — ', '').replace('Mahi PG â€” ', '')
+}
+
+const emptyRoomForm = {
+  roomNumber: '',
+  branchId: '',
+  type: 'Single' as AdminRoom['type'],
+  ac: true,
+  pricePerMonth: 0,
+  status: 'available' as AdminRoom['status'],
+  residentName: '',
+  vacatingDate: getToday(),
+  floor: 1,
+}
+
 export default function RoomsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [branchFilter, setBranchFilter] = useState('all')
@@ -52,8 +69,10 @@ export default function RoomsPage() {
   const [typeFilter, setTypeFilter] = useState('all')
   const [vacatingRoom, setVacatingRoom] = useState<AdminRoom | null>(null)
   const [vacatingDate, setVacatingDate] = useState(getToday())
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [newRoom, setNewRoom] = useState(emptyRoomForm)
 
-  const { rooms, branches, currentUser, updateRoomStatus, updateRoomOccupancy } = useAdminStore()
+  const { rooms, branches, currentUser, addRoom, updateRoomStatus, updateRoomOccupancy } = useAdminStore()
 
   const isManager = currentUser?.role === 'branch_manager'
   const targetBranchId = currentUser?.branchId
@@ -113,17 +132,195 @@ export default function RoomsPage() {
     setVacatingRoom(null)
   }
 
+  const handleAddRoom = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const finalBranchId = isManager ? targetBranchId : newRoom.branchId
+    if (!finalBranchId) return
+
+    const selectedBranch = branches.find((branch) => branch.id === finalBranchId)
+    if (!selectedBranch) return
+
+    addRoom({
+      id: `r-${finalBranchId}-${Date.now()}`,
+      roomNumber: newRoom.roomNumber.trim(),
+      branchId: finalBranchId,
+      branchName: getBranchDisplayName(selectedBranch.name),
+      type: newRoom.type,
+      ac: newRoom.ac,
+      pricePerMonth: newRoom.pricePerMonth,
+      status: newRoom.status,
+      residentName: newRoom.status === 'occupied' || newRoom.status === 'vacating'
+        ? newRoom.residentName.trim() || undefined
+        : undefined,
+      vacatingDate: newRoom.status === 'vacating' ? newRoom.vacatingDate : undefined,
+      floor: newRoom.floor,
+    })
+
+    toast.success(`Room ${newRoom.roomNumber} added successfully`)
+    setNewRoom(emptyRoomForm)
+    setIsAddOpen(false)
+  }
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold font-serif text-foreground tracking-tight">
-          Room Inventory
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          {isManager ? 'View and manage rooms for your assigned branch' : 'View and manage rooms across all branches'}
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold font-serif text-foreground tracking-tight">
+            Room Inventory
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            {isManager ? 'View and manage rooms for your assigned branch' : 'View and manage rooms across all branches'}
+          </p>
+        </div>
+
+        <Button className="gap-2 rounded-xl h-11 font-semibold" onClick={() => setIsAddOpen(true)}>
+          <Plus className="size-4" />
+          Add Room
+        </Button>
       </div>
+
+      <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+        <DialogContent className="sm:max-w-[520px]">
+          <form onSubmit={handleAddRoom}>
+            <DialogHeader>
+              <DialogTitle>Add Room</DialogTitle>
+              <DialogDescription>
+                Enter the room details and initial availability status.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4 max-h-[65vh] overflow-y-auto px-1">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="room-number">Room Number</Label>
+                  <Input
+                    id="room-number"
+                    required
+                    value={newRoom.roomNumber}
+                    onChange={(e) => setNewRoom({ ...newRoom, roomNumber: e.target.value })}
+                    placeholder="e.g. 401"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="floor">Floor</Label>
+                  <Input
+                    id="floor"
+                    type="number"
+                    min={0}
+                    required
+                    value={newRoom.floor}
+                    onChange={(e) => setNewRoom({ ...newRoom, floor: parseInt(e.target.value) || 0 })}
+                  />
+                </div>
+              </div>
+
+              {!isManager && (
+                <div className="space-y-2">
+                  <Label htmlFor="branch">Branch</Label>
+                  <select
+                    id="branch"
+                    required
+                    value={newRoom.branchId}
+                    onChange={(e) => setNewRoom({ ...newRoom, branchId: e.target.value })}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="">Select branch</option>
+                    {branches.filter((branch) => branch.status === 'active').map((branch) => (
+                      <option key={branch.id} value={branch.id}>{getBranchDisplayName(branch.name)}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="room-type">Room Type</Label>
+                  <select
+                    id="room-type"
+                    value={newRoom.type}
+                    onChange={(e) => setNewRoom({ ...newRoom, type: e.target.value as AdminRoom['type'] })}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="Single">Single</option>
+                    <option value="Double Sharing">Double Sharing</option>
+                    <option value="Triple Sharing">Triple Sharing</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ac-type">AC Type</Label>
+                  <select
+                    id="ac-type"
+                    value={newRoom.ac ? 'ac' : 'non-ac'}
+                    onChange={(e) => setNewRoom({ ...newRoom, ac: e.target.value === 'ac' })}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="ac">AC</option>
+                    <option value="non-ac">Non-AC</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="price">Monthly Price</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    min={0}
+                    required
+                    value={newRoom.pricePerMonth}
+                    onChange={(e) => setNewRoom({ ...newRoom, pricePerMonth: parseInt(e.target.value) || 0 })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="room-status">Initial Status</Label>
+                  <select
+                    id="room-status"
+                    value={newRoom.status}
+                    onChange={(e) => setNewRoom({ ...newRoom, status: e.target.value as AdminRoom['status'] })}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="available">Vacant</option>
+                    <option value="occupied">Occupied</option>
+                    <option value="vacating">Vacating</option>
+                    <option value="maintenance">Maintenance</option>
+                  </select>
+                </div>
+              </div>
+
+              {(newRoom.status === 'occupied' || newRoom.status === 'vacating') && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="resident-name">Resident Name</Label>
+                    <Input
+                      id="resident-name"
+                      value={newRoom.residentName}
+                      onChange={(e) => setNewRoom({ ...newRoom, residentName: e.target.value })}
+                      placeholder="Optional"
+                    />
+                  </div>
+                  {newRoom.status === 'vacating' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="new-room-vacating-date">Vacating Date</Label>
+                      <Input
+                        id="new-room-vacating-date"
+                        type="date"
+                        required
+                        value={newRoom.vacatingDate}
+                        onChange={(e) => setNewRoom({ ...newRoom, vacatingDate: e.target.value })}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={!isManager && !newRoom.branchId}>Save Room</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!vacatingRoom} onOpenChange={(open) => !open && setVacatingRoom(null)}>
         <DialogContent className="sm:max-w-[425px]">

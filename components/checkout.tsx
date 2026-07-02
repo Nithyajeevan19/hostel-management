@@ -12,8 +12,43 @@ import { Spinner } from '@/components/ui/spinner'
 
 declare global {
   interface Window {
-    Razorpay: any
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance
   }
+}
+
+interface RazorpaySuccessResponse {
+  razorpay_payment_id: string
+  razorpay_order_id: string
+  razorpay_signature: string
+}
+
+interface RazorpayFailureResponse {
+  error: {
+    description: string
+  }
+}
+
+interface RazorpayOptions {
+  key: string | undefined
+  amount: string | number
+  currency: string
+  name: string
+  description: string
+  order_id: string
+  handler: (response: RazorpaySuccessResponse) => void
+  prefill: {
+    name: string
+    email: string
+    contact: string
+  }
+  theme: {
+    color: string
+  }
+}
+
+interface RazorpayInstance {
+  on: (event: 'payment.failed', handler: (response: RazorpayFailureResponse) => void) => void
+  open: () => void
 }
 
 interface CheckoutProps {
@@ -45,7 +80,7 @@ export function Checkout({ roomId }: CheckoutProps) {
         name: 'Mahi PG',
         description: orderData.roomDesc,
         order_id: orderData.orderId,
-        handler: function (response: any) {
+        handler: function (response: RazorpaySuccessResponse) {
           // This function is called on successful payment
           setIsSuccess(true)
           toast.success('Payment successful!', {
@@ -63,7 +98,7 @@ export function Checkout({ roomId }: CheckoutProps) {
       }
 
       const rzp = new window.Razorpay(options)
-      rzp.on('payment.failed', function (response: any) {
+      rzp.on('payment.failed', function (response: RazorpayFailureResponse) {
         toast.error('Payment failed', {
           description: response.error.description,
         })

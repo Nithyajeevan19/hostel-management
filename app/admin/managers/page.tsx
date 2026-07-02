@@ -42,6 +42,17 @@ export default function ManagersPage() {
     branchId: '',
   })
 
+  const filteredManagers = useMemo(() => {
+    return managers.filter((m) => {
+      const branchName = branches.find((b) => b.id === m.branchId)?.name || ''
+      return (
+        m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        branchName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    })
+  }, [searchQuery, managers, branches])
+
   // Security guard for Client-Side rendering: if manager logs in, don't show the page content
   if (currentUser?.role !== 'super_admin') {
     return (
@@ -54,17 +65,6 @@ export default function ManagersPage() {
       </div>
     )
   }
-
-  const filteredManagers = useMemo(() => {
-    return managers.filter((m) => {
-      const branchName = branches.find((b) => b.id === m.branchId)?.name || ''
-      return (
-        m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        branchName.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    })
-  }, [searchQuery, managers, branches])
 
   const handleOpenAddDialog = () => {
     setEditingManager(null)
