@@ -4,26 +4,26 @@ import { ScrollReveal } from '@/components/scroll-reveal'
 
 const commuteData = {
   forStudents: [
-    { name: 'Mithibai College', time: '10 min', mode: 'Auto' },
-    { name: 'University of Mumbai (Kalina)', time: '25 min', mode: 'Metro' },
-    { name: 'SPJIMR (Bhavan\'s Campus)', time: '10 min', mode: 'Walk' },
-    { name: 'IIT Bombay (Powai)', time: '35 min', mode: 'Metro' },
+    { name: 'MIT Academy of Engineering (MITAOE)', time: '5 min', mode: 'Walk' },
+    { name: 'DY Patil College (Akurdi)', time: '20 min', mode: 'Auto/Bus' },
+    { name: 'COEP Tech University (Shivajinagar)', time: '35 min', mode: 'Bus' },
+    { name: 'MIT WPU Campus (Kothrud)', time: '45 min', mode: 'Bus/Metro' },
   ],
   forProfessionals: [
-    { name: 'Nesco IT Park (Goregaon)', time: '15 min', mode: 'Metro' },
-    { name: 'Bandra Kurla Complex (BKC)', time: '25 min', mode: 'Auto' },
-    { name: 'Mindspace Malad', time: '20 min', mode: 'Metro' },
-    { name: 'Seepz SEZ (Andheri East)', time: '18 min', mode: 'Metro' },
+    { name: 'Markal Industrial Zone', time: '10 min', mode: 'Auto' },
+    { name: 'Chakan MIDC Industrial Area', time: '15 min', mode: 'Auto' },
+    { name: 'Talawade Software Park', time: '20 min', mode: 'Auto/Bus' },
+    { name: 'Hinjewadi IT Park Phase 1', time: '45 min', mode: 'Bus' },
   ],
 }
 
 const nearbyEssentials = [
-  { icon: Train, name: 'Andheri Metro Station', distance: '5 min walk' },
-  { icon: Hospital, name: 'Kokilaben Hospital', distance: '12 min' },
-  { icon: ShoppingBag, name: 'Infiniti Mall Andheri', distance: '8 min' },
-  { icon: GraduationCap, name: 'Mithibai College', distance: '10 min' },
-  { icon: ShoppingBag, name: 'Star Bazaar', distance: '3 min walk' },
-  { icon: Building2, name: 'SBI & HDFC Bank ATMs', distance: '2 min walk' },
+  { icon: Train, name: 'Alandi Bus ST Stand', distance: '5 min walk' },
+  { icon: Hospital, name: 'Indrayani Hospital', distance: '8 min' },
+  { icon: ShoppingBag, name: 'Sant Dnyaneshwar Mandir', distance: '10 min walk' },
+  { icon: GraduationCap, name: 'MITAOE Campus', distance: '5 min walk' },
+  { icon: ShoppingBag, name: 'Bhosari D-Mart', distance: '12 min' },
+  { icon: Building2, name: 'SBI & Bank of Maharashtra ATMs', distance: '2 min walk' },
 ]
 
 const neighborhoodPerks = [
@@ -43,7 +43,7 @@ export function LocationSection() {
             Your Daily Commute, <span className="text-primary italic">Sorted</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-            Located in the heart of Mumbai&apos;s bustling suburb of Andheri West with metro access just minutes away. Whether you study or work, you&apos;ll spend less time commuting and more time living.
+            Located in the peaceful town of Alandi, Pune, close to key educational institutions and industrial zones. Whether you study or work, you&apos;ll spend less time commuting and more time living.
           </p>
         </ScrollReveal>
 
@@ -54,11 +54,11 @@ export function LocationSection() {
               {/* Map Embed */}
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-lg bg-muted">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.0!2d72.83!3d19.11!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9eed0e7161b%3A0xc3f60f64c6792376!2sAndheri%20West%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1625550000000!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.09673456789!2d73.8913!3d18.6738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c88fd69ebc4b%3A0xc6cb52504b2c159f!2sShri%20Gajanan%20Maharaj%20Temple%2C%20Alandi!5e0!3m2!1sen!2sin!4v1625550000000!5m2!1sen!2sin"
                   className="absolute inset-0 size-full border-0"
                   loading="lazy"
                   style={{ filter: 'grayscale(15%) contrast(1.05)' }}
-                  title="SURYA PG Location"
+                  title="Surya Mens & Women's PG Location"
                 />
               </div>
 
@@ -70,14 +70,13 @@ export function LocationSection() {
                       <MapPin className="size-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg text-foreground">SURYA PG</h4>
+                      <h4 className="font-bold text-lg text-foreground">Surya Mens & Women&apos;s PG</h4>
                       <p className="text-muted-foreground text-sm leading-relaxed mt-1">
-                        Plot 21, JP Road, Near Andheri Metro Station,<br />
-                        Andheri West, Mumbai, Maharashtra — 400058
+                        Anand Nagar, Beside Gajanan Maharaj Mandir, Alandi, Pune 412105
                       </p>
                       <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/8 px-3 py-1 rounded-full">
                         <Navigation className="size-3" />
-                        Landmark: Opposite Andheri Sports Complex
+                        Landmark: Beside Gajanan Maharaj Mandir
                       </p>
                     </div>
                   </div>

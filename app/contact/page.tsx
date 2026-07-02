@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactForm } from '@/components/contact-form'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | SURYA PG',
-  description: 'Get in touch with SURYA PG. Schedule a visit, ask questions, or book your room today.',
+  title: "Contact Us | Surya Mens & Women's PG",
+  description: "Get in touch with Surya Mens & Women's PG. Schedule a visit, ask questions, or book your room today.",
 }
 
 export default function ContactPage() {
@@ -88,11 +88,11 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold">Address</h3>
                       <p className="mt-1 text-muted-foreground">
-                        Plot 12, Carter Road, Near Jogger's Park,<br />
-                        Bandra West, Mumbai — 400050
+                        Anand Nagar, Beside Gajanan Maharaj Mandir,<br />
+                        Alandi, Pune — 412105
                       </p>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        Landmark: Opposite Jogger's Park
+                        Landmark: Beside Gajanan Maharaj Mandir
                       </p>
                     </div>
                   </CardContent>
@@ -132,7 +132,7 @@ export default function ContactPage() {
             <div className="group relative w-full h-[450px] overflow-hidden rounded-2xl shadow-xl animate-in fade-in zoom-in-95 duration-1000 fill-mode-both delay-300">
               {/* Real Google Map iframe embedded as background */}
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.2123456789!2d72.8252!3d19.0664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c91357f7223b%3A0x7d6f51cb7e4dbdfb!2sCarter%20Rd%2C%20Bandra%20West%2C%20Mumbai%2C%20Maharashtra%20400050!5e0!3m2!1sen!2sin!4v1625550000000!5m2!1sen!2sin" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.09673456789!2d73.8913!3d18.6738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c88fd69ebc4b%3A0xc6cb52504b2c159f!2sShri%20Gajanan%20Maharaj%20Temple%2C%20Alandi!5e0!3m2!1sen!2sin!4v1625550000000!5m2!1sen!2sin" 
                 className="absolute inset-0 size-full border-0 opacity-70 transition-opacity duration-500 group-hover:opacity-90" 
                 loading="lazy" 
                 style={{ filter: "grayscale(20%) contrast(1.1)" }}
@@ -152,13 +152,13 @@ export default function ContactPage() {
                 </div>
 
                 <div className="bg-background/80 backdrop-blur-md px-8 py-5 rounded-xl shadow-lg border border-border/50 pointer-events-auto transition-transform duration-300 hover:scale-105">
-                  <h3 className="font-serif text-xl font-bold text-foreground">SURYA PG</h3>
+                  <h3 className="font-serif text-xl font-bold text-foreground">Surya Mens & Women&apos;s PG</h3>
                   <p className="mt-1 text-muted-foreground text-sm leading-relaxed">
-                    Plot 12, Carter Road, Near Jogger's Park,<br />
-                    Bandra West, Mumbai — 400050
+                    Anand Nagar, Beside Gajanan Maharaj Mandir,<br />
+                    Alandi, Pune — 412105
                   </p>
                   <a
-                    href="https://maps.google.com/?q=19.0664,72.8252"
+                    href="https://maps.google.com/?q=18.6738,73.8913"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"

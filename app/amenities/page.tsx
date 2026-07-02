@@ -19,7 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AMENITIES } from '@/lib/amenities'
 
 export const metadata: Metadata = {
-  title: 'Amenities | SURYA PG',
+  title: "Amenities | Surya Mens & Women's PG",
   description: 'Discover all the amenities and facilities we offer - from high-speed WiFi to homely meals, laundry service, and 24/7 security.',
 }
 

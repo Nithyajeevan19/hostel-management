@@ -4,7 +4,7 @@ import { Coffee, BookOpen, Utensils, Moon, Sun, Users } from 'lucide-react'
 const timeline = [
   { time: '6:30 AM', icon: Sun, title: 'Rise & Shine', description: 'Start your day with fresh air on the terrace or a quick workout in the fitness area.' },
   { time: '7:30 AM', icon: Utensils, title: 'Wholesome Breakfast', description: 'Hot parathas, idli, dosa, or poha — a rotating regional menu every morning.' },
-  { time: '9:00 AM', icon: BookOpen, title: 'Head Out or Log In', description: 'Metro is 5 minutes away. Or use the study lounge for remote work and online classes.' },
+  { time: '9:00 AM', icon: BookOpen, title: 'Head Out or Log In', description: 'Bus stand is 5 minutes away. Or use the study lounge for remote work and online classes.' },
   { time: '1:00 PM', icon: Utensils, title: 'Home-Style Lunch', description: 'Dal, rice, roti, sabzi, and salad — packed fresh if you need it at work.' },
   { time: '5:00 PM', icon: Coffee, title: 'Evening Tea & Unwind', description: 'Tea, coffee, and snacks in the common lounge. Catch up with fellow residents.' },
   { time: '8:30 PM', icon: Utensils, title: 'Comforting Dinner', description: 'Proper home-cooked dinner. Weekend specials include biriyani, paneer, and regional dishes.' },
@@ -16,7 +16,7 @@ export function ResidentLifeSection() {
     <section className="py-24 md:py-32 bg-secondary/10 overflow-hidden">
       <div className="container mx-auto px-4 max-w-5xl">
         <ScrollReveal animation="fade-up" className="mb-16 md:mb-20 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Life at SURYA PG</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Life at Surya Mens & Women&apos;s PG</p>
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-foreground tracking-tight">
             A Day in the <span className="text-primary italic">Life</span>
           </h2>

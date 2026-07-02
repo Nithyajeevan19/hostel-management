@@ -22,7 +22,7 @@ export function TestimonialsSection() {
             What Our Residents Say
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Hear from our happy residents about their experience living at SURYA PG.
+            Hear from our happy residents about their experience living at Surya Mens & Women&apos;s PG.
           </p>
         </div>
 

@@ -14,7 +14,7 @@ export function Hero() {
               Premium PG Accommodation
             </Badge>
             <h1 className="text-balance font-serif text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-150">
-              Premium PG Living for <span className="text-primary italic">Professionals</span> & Students in Mumbai.
+              Premium PG Living for <span className="text-primary italic">Professionals</span> & Students in Pune.
             </h1>
             <p className="text-pretty text-lg text-muted-foreground md:text-xl animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-300">
               Experience a fully managed, stress-free stay with homely meals, high-speed Wi-Fi, and daily housekeeping—all in a safe, vibrant community.

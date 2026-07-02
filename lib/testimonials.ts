@@ -23,8 +23,8 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: '2',
     name: 'Rahul Verma',
-    role: 'MBA Student, SPJIMR Mumbai',
-    content: "As a student, I needed fast Wi-Fi, a quiet study corner, and meals I don't have to think about. SURYA PG nails all three. My GPA has actually improved since I moved here.",
+    role: 'MBA Student, MIT Alandi',
+    content: "As a student, I needed fast Wi-Fi, a quiet study corner, and meals I don't have to think about. Surya Mens & Women's PG nails all three. My GPA has actually improved since I moved here.",
     rating: 5,
     initials: 'RV',
     stayDuration: '1.5 years',
@@ -43,7 +43,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: '4',
     name: 'Amit Kumar',
-    role: 'Research Scholar, IIT Bombay',
+    role: 'Research Scholar, COEP Pune',
     content: 'The peaceful environment is perfect for my research. When I need to work late, I use the study lounge. The management understands academic life.',
     rating: 5,
     initials: 'AK',
@@ -63,8 +63,8 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: '6',
     name: 'Mrs. Sunita Devi',
-    role: 'Parent — Son stays at SURYA PG',
-    content: "My son moved from Patna for his first job. As a parent, I was very anxious. But after visiting SURYA PG, I felt completely reassured. The CCTV, the biometric access, and the warden's responsiveness — my son is safe, and I sleep peacefully.",
+    role: 'Parent — Son stays at Surya Mens & Women\'s PG',
+    content: "My son moved from Patna for his first job. As a parent, I was very anxious. But after visiting Surya Mens & Women's PG, I felt completely reassured. The CCTV, the biometric access, and the warden's responsiveness — my son is safe, and I sleep peacefully.",
     rating: 5,
     initials: 'SD',
     stayDuration: 'Son staying 1 year',

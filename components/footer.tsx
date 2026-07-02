@@ -42,11 +42,11 @@ export function Footer() {
               <div className="flex size-9 items-center justify-center rounded-lg bg-primary">
                 <Home className="size-5 text-primary-foreground" />
               </div>
-              <span className="font-serif text-xl font-bold">SURYA PG</span>
+              <span className="font-serif text-xl font-bold">Surya Mens & Women&apos;s PG</span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Premium paying guest accommodation for students and working
-              professionals in Mumbai. Safe, comfortable, and community-first
+              professionals in Pune. Safe, comfortable, and community-first
               co-living.
             </p>
             <div className="flex gap-3">
@@ -121,9 +121,9 @@ export function Footer() {
               <div className="flex items-start gap-3">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
                 <span>
-                  Plot 12, Carter Road, Near Jogger's Park,
+                  Anand Nagar, Beside Gajanan Maharaj Mandir,
                   <br />
-                  Bandra West, Mumbai — 400050
+                  Alandi, Pune — 412105
                 </span>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function Footer() {
         <Separator className="my-8" />
 
         <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-muted-foreground md:flex-row">
-          <p>© {new Date().getFullYear()} SURYA PG. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Surya Mens & Women&apos;s PG. All rights reserved.</p>
           <div className="flex gap-5">
             {policies.map((p) => (
               <Link
@@ -175,7 +175,7 @@ export function Footer() {
               </Link>
             ))}
           </div>
-          <p>Made with ❤️ in Mumbai</p>
+          <p>Made with ❤️ in Pune</p>
         </div>
       </div>
     </footer>
